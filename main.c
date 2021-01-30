@@ -1,5 +1,5 @@
-/* Sarun Kumar
-   mvsarun6
+/* Author : Sarun Kumar
+            mvsarun6
 */
 
 /* pre req:
@@ -19,26 +19,31 @@ FT_PROG : https://ftdichip.com/utilities/#FT_PROG
 
 #include "ftd2xx.h"
 #include "stdio.h"
+
+#define CHECKSTATUS(sts) if(sts!=FT_OK)                                                 \
+                          {                                                               \
+                               printf("\nStatus = %d **Failed**, line : %d\nExiting...",sts,__LINE__); \
+							   getchar(); return 0;                                                     \
+						  }
 int main()
 {
+	FT_STATUS status=FT_OK;
 
-	int deviceNumber=0;
-	FT_HANDLE pHandle;
-
-	FT_STATUS status=0;
 
     //Open device
+	int deviceNumber=0;
+	FT_HANDLE pHandle;
 	status |= FT_Open(deviceNumber, &pHandle);	
-    printf("\n status %d",status);
+	CHECKSTATUS(status);
 
-	//Set Baud Rate
+	//Set Baud Rate 9600
 	status |= FT_SetBaudRate(pHandle, 9600);
+	CHECKSTATUS(status);
 		
-	
+	//Test write
 	char lpBuffer[] ={0x05,0x06,0x08};
 	DWORD dwBytesToWrite=3;
 	DWORD lpBytesWritten;
-
     while(1)
 	{
     	//printf("\n writing..");
@@ -50,3 +55,7 @@ int main()
 
     return 0;	
 }
+
+
+
+
